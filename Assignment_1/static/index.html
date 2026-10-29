@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content">
+  <title>Student Support Portal | College Services</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="vendor/bootstrap.min.css" rel="stylesheet">
+  <script src="vendor/marked.min.js"></script>
+  <link href="style.css?v=12" rel="stylesheet">
+</head>
+<body>
+
+<!-- ============ LOGIN VIEW ============ -->
+<main id="loginView" class="login-page d-none">
+  <div class="login-container">
+    <div class="login-brand">
+      <div class="brand-crest">
+        <svg class="ic"><use href="#i-book"/></svg>
+      </div>
+      <h2>Student Support Portal</h2>
+      <p>Sign in to access your student records, fee status, and policy guidance</p>
+    </div>
+
+    <div class="login-card">
+      <form id="loginForm" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="sid">Student ID</label>
+          <div class="input-wrap">
+            <svg class="input-ic"><use href="#i-user"/></svg>
+            <input id="sid" class="form-control" autocomplete="username" placeholder="e.g. S101" required>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="pw">Password</label>
+          <div class="input-wrap">
+            <svg class="input-ic"><use href="#i-lock"/></svg>
+            <input id="pw" type="password" class="form-control" autocomplete="current-password" placeholder="••••••••••••" required>
+          </div>
+        </div>
+
+        <p id="loginErr" class="err" role="alert"></p>
+        <button class="btn btn-primary btn-login w-100">
+          <span>Sign In</span>
+          <svg class="ic sm"><use href="#i-arrow-right"/></svg>
+        </button>
+      </form>
+
+      <div class="demo-section">
+        <div class="demo-divider"><span>OR QUICK SIGN-IN AS DEMO STUDENT</span></div>
+        <div class="demo-grid">
+          <button type="button" class="demo-row" data-id="S101" data-pw="meet@123">
+            <div class="demo-avatar">MP</div>
+            <div class="demo-info">
+              <div class="demo-name">Meet Patel <span class="badge-status badge-paid">Fully Paid</span></div>
+              <div class="demo-desc">S101 • CGPA 8.4 • Merit Scholarship</div>
+            </div>
+            <svg class="demo-arrow"><use href="#i-arrow-right"/></svg>
+          </button>
+
+          <button type="button" class="demo-row" data-id="S102" data-pw="harsh@123">
+            <div class="demo-avatar">HS</div>
+            <div class="demo-info">
+              <div class="demo-name">Harsh Shah <span class="badge-status badge-partial">Partly Paid</span></div>
+              <div class="demo-desc">S102 • ₹40,000 Balance Due</div>
+            </div>
+            <svg class="demo-arrow"><use href="#i-arrow-right"/></svg>
+          </button>
+
+          <button type="button" class="demo-row" data-id="S103" data-pw="neel@123">
+            <div class="demo-avatar">NP</div>
+            <div class="demo-info">
+              <div class="demo-name">Neel Patel <span class="badge-status badge-unpaid">Unpaid</span></div>
+              <div class="demo-desc">S103 • ₹100,000 Balance Due</div>
+            </div>
+            <svg class="demo-arrow"><use href="#i-arrow-right"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="login-footer">
+      <span>Sample College Student Information System • Confidential & Protected</span>
+    </div>
+  </div>
+</main>
+
+<!-- ============ APP VIEW (FULL SCREEN FLUID) ============ -->
+<div id="appView" class="app-container d-none">
+  <!-- Top Navigation Bar -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <button id="sidebarToggle" class="btn-sidebar-toggle" aria-label="Toggle navigation">
+        <svg class="ic"><use href="#i-menu"/></svg>
+      </button>
+      <div class="logo">
+        <div class="brand-crest sm">
+          <svg class="ic"><use href="#i-book"/></svg>
+        </div>
+        <div class="logo-text">
+          <span class="logo-title">Student Support Portal</span>
+          <span class="logo-subtitle">Sample College • Student Services</span>
+        </div>
+      </div>
+      <div class="system-status-pill">
+        <span class="status-dot"></span>
+        <span>Online</span>
+      </div>
+    </div>
+
+    <div class="topbar-right">
+      <div class="user-pill">
+        <span class="avatar" id="userAvatar">MP</span>
+        <div class="user-meta">
+          <span class="user-name" id="userName">Meet Patel</span>
+          <span class="user-id" id="userId">S101</span>
+        </div>
+      </div>
+      <button id="logout" class="btn btn-logout" title="Sign out">
+        <svg class="ic sm"><use href="#i-lock"/></svg>
+        <span>Logout</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Fluid Full-Width Workspace Layout -->
+  <div class="layout">
+    <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+    <!-- Left Sidebar Panel -->
+    <aside class="side" id="sidePanel">
+      <!-- New Conversation Action -->
+      <div class="side-top">
+        <button id="newChat" class="btn btn-new-chat w-100">
+          <svg class="ic sm"><use href="#i-plus"/></svg>
+          <span>New Conversation</span>
+        </button>
+      </div>
+
+      <!-- Sidebar Tab Switcher -->
+      <nav class="sidebar-tabs" aria-label="Sidebar Sections">
+        <button type="button" class="sb-tab active" data-pane="pane-prompts">
+          <svg class="ic sm"><use href="#i-sparkles"/></svg>
+          <span>Questions</span>
+        </button>
+        <button type="button" class="sb-tab" data-pane="pane-memory">
+          <svg class="ic sm"><use href="#i-user"/></svg>
+          <span>Memory</span>
+          <span class="sb-badge" id="sbMemCount">0</span>
+        </button>
+      </nav>
+
+      <!-- Pane 1: Quick Questions -->
+      <div id="pane-prompts" class="sb-pane active">
+        <div class="pane-header">
+          <span class="pane-title">Suggested Topics</span>
+          <span class="badge-counter" id="demoCounter">13 Prompts</span>
+        </div>
+        <ul id="examples" class="quick-list"></ul>
+      </div>
+
+      <!-- Pane 2: Saved Memory -->
+      <div id="pane-memory" class="sb-pane d-none">
+        <div class="pane-header">
+          <span class="pane-title">Saved Memory</span>
+          <div class="mem-actions">
+            <button id="toggleAddMem" type="button" class="link-btn" title="Add custom memory fact">+ Add Fact</button>
+            <button id="clearMem" class="link-btn">Clear All</button>
+          </div>
+        </div>
+        <p class="pane-tip">Facts saved here are recalled across future conversations.</p>
+        <form id="addMemForm" class="mem-add-form d-none">
+          <input id="memKey" class="form-control form-control-sm" placeholder="Key (e.g. programme)" required>
+          <input id="memVal" class="form-control form-control-sm" placeholder="Value (e.g. PGDM Agentic AI)" required>
+          <button class="btn btn-sm btn-primary">Save</button>
+        </form>
+        <ul id="memList" class="mem-list"></ul>
+      </div>
+
+      <footer class="side-footer">
+        <span>Sample College Institute • Fictional Demo Data</span>
+      </footer>
+    </aside>
+
+    <!-- Main Chat Interactive Center -->
+    <main class="chat-panel">
+      <!-- Chat Conversation Stream -->
+      <div id="chat" class="chat-stream" aria-live="polite"></div>
+
+      <!-- Floating Modern Composer Wrap -->
+      <div class="composer-container">
+        <form id="form" class="composer-form">
+          <div class="composer-input-box">
+            <svg class="composer-prefix-ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+            <input id="msg" class="composer-input" placeholder="Ask about fees, courses, policies..." autocomplete="off">
+            <button id="send" class="btn btn-send" title="Send message (Enter)">
+              <svg class="ic sm"><use href="#i-send"/></svg>
+              <span>Send</span>
+            </button>
+          </div>
+        </form>
+        <div class="composer-footer">
+          <span>Official student service assistant. Never share sensitive credentials or passwords.</span>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ============ SVG ICON SPRITE ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></symbol>
+    <symbol id="i-wallet" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><circle cx="16.5" cy="14.5" r="1"/></symbol>
+    <symbol id="i-award" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14 7 22l5-3 5 3-1.5-8"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4M12 17v.5"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></symbol>
+    <symbol id="i-ticket" viewBox="0 0 24 24"><path d="M4 7h16v3a2 2 0 0 0 0 4v3H4v-3a2 2 0 0 0 0-4V7z"/></symbol>
+    <symbol id="i-bot" viewBox="0 0 24 24"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 8V4"/><circle cx="9" cy="14" r="1"/><circle cx="15" cy="14" r="1"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></symbol>
+    <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+    <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z"/></symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5M21 12a9 9 0 0 1-15 6.7L3 16M3 21v-5h5"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  </defs>
+</svg>
+
+<script src="vendor/bootstrap.bundle.min.js"></script>
+<script src="app.js?v=12"></script>
+</body>
+</html>

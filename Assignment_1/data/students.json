@@ -1,0 +1,32 @@
+[
+  {
+    "student_id": "S101",
+    "name": "Meet Patel (fictional)",
+    "fee_total": 100000,
+    "fee_paid": 100000,
+    "due_date": "2026-11-15",
+    "scholarship_status": "approved",
+    "scholarship_detail": "Merit scholarship, 25% fee waiver",
+    "password": "meet@123"
+  },
+  {
+    "student_id": "S102",
+    "name": "Harsh Shah (fictional)",
+    "fee_total": 100000,
+    "fee_paid": 60000,
+    "due_date": "2026-11-15",
+    "scholarship_status": "pending",
+    "scholarship_detail": "Need-based application under review",
+    "password": "harsh@123"
+  },
+  {
+    "student_id": "S103",
+    "name": "Neel Patel (fictional)",
+    "fee_total": 100000,
+    "fee_paid": 0,
+    "due_date": "2026-10-31",
+    "scholarship_status": "none",
+    "scholarship_detail": "No scholarship application on file",
+    "password": "neel@123"
+  }
+]
