@@ -1,8 +1,5 @@
-# Assignment 2: Safe and Production-Aware Student Support Agent
-This is the **same agent as Assignment 1 (`../Assignment_1`), extended** with identity-based authorization, human approval and an audit log.
-The first half of this README describes the base agent (Assignment 1); the second half ("Assignment 2: safe, production-aware agent") describes what was added.
-
-Base stack: **LangChain + Groq** (LLM and tool calling), **LangSmith** (tracing), SQLite, vectorless BM25 RAG, Flask backend with an HTML/CSS/JavaScript/Bootstrap frontend (Bootstrap and the font are bundled in `static/vendor`, so the page works offline).
+# Intelligent Student Support Agent
+Agentic AI Assignment 1. **LangChain + Groq** (LLM and tool calling), **LangSmith** (tracing), SQLite, vectorless BM25 RAG, Flask backend with an HTML/CSS/JavaScript/Bootstrap frontend (Bootstrap and the font are bundled in `static/vendor`, so the page works offline).
 All students, fees and policies are **fictional demo data**.
 
 ## How it works
@@ -24,7 +21,7 @@ run them in Python -> send real results back -> repeat up to `MAX_STEPS` -> fina
 |---|---|
 | Agent loop | `agent.py` |
 | Tools (fee, scholarship, ticket, policy search, save memory) | `tools.py` |
-| Persistent memory | `memory.py` (SQLite, one row per student+key, blocks passwords/cards/OTP/long digit strings) |
+| Persistent memory | `memory.py` (SQLite, one row per student+key, blocks passwords/cards/OTP) |
 | Vectorless RAG | `retrieval.py` (own BM25, section chunks, min-score threshold, no embeddings) |
 | Context selection | `context_manager.py` (rules + that student's memory + last 6 turns; policy/records only via tools) |
 | Missing info / abstain | system rules + `search_policy` returns "no relevant policy" |
@@ -51,6 +48,7 @@ Without LangSmith keys the app works, tracing is just off.
 ## Run (Local & Production WSGI)
 ```
 python app.py                 # starts Waitress production WSGI server on http://0.0.0.0:5000
+pytest -q                     # tests (no API needed; Groq test is skipped without a key)
 python evaluate.py            # retrieval tests always; full agent tests too if GROQ_API_KEY is set -> reports/evaluation.md + CSVs
 python scripts/initialize_db.py --reset   # DEV ONLY: wipe and re-seed
 ```
@@ -89,7 +87,7 @@ Password login is demo-grade (no HTTPS, no password reset), keyword (not semanti
 |---|---|
 | Agent decides when a tool is needed and uses the result before answering | `agent.py` loop: tool results are returned to the model before the final answer |
 | At least two tools | fee status, scholarship status, create ticket, policy search, save memory (`tools.py`) |
-| Persistent memory; temporary/sensitive data not stored | `memory.py` (SQLite; sensitive block-list; key/value validated) |
+| Persistent memory; temporary/sensitive data not stored | `memory.py` (SQLite; sensitive block-list; only 3 allowed keys; saved only when the student asks) |
 | Retrieval from one handbook, only relevant parts | `retrieval.py` BM25 returns the top 3 sections above a score threshold, never the whole file |
 | Context selection | `context_manager.py`: rules + that student's memory + last 6 turns; everything else fetched by tools on demand |
 | Missing info / tool errors / unanswerable | tool errors are returned as controlled errors; "no relevant policy" result; test cases T06, T07, T08, T11, T12 |
@@ -149,8 +147,8 @@ chunk ids and scores, memory ids, model latency, total latency, input/output tok
 ## Final evaluation
 `python evaluate.py` runs: A retrieval, B ten security control tests that need no API key, and C the agent tests with the real Groq model
 (13 Assignment 1 questions + 6 privacy tests + 3 unsafe-action tests) and writes `reports/evaluation.md` with the comparison table
-(accuracy, privacy tests, unsafe-action tests, latency, tokens, audit evidence). For the Assignment 1 column, run `python evaluate.py` in `../Assignment_1`, then copy its
-`reports/evaluation_agent.csv` into `reports/baseline_a1/` here before running. Without `GROQ_API_KEY`, part C says NOT RUN.
+(accuracy, privacy tests, unsafe-action tests, latency, tokens, audit evidence). For the Assignment 1 column, copy your Assignment 1
+`reports/evaluation_agent.csv` into `reports/baseline_a1/` before running. Without `GROQ_API_KEY`, part C says NOT RUN.
 
 ## Known limits (be honest in the demo)
 - The login is demo-grade: no HTTPS, no password reset, no single sign-on, in-memory lockout counter.
